@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Project Evaluation System</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 30px; }
+table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+th { background-color: #f8f9fa; }
+input[type="number"] { width: 80px; padding: 6px; }
+.disabled { background-color: #f5f5f5; cursor: not-allowed; }
+.comments { width: 100%; height: 100px; margin: 15px 0; }
+.header-row { background-color: #e9ecef; }
+</style>
+</head>
+<body>
+<div style="width: 80%; margin: 0 auto;">
+<table>
+<tr class="header-row">
+<th colspan="2">Computer Science Project</th>
+<th colspan="2">Group Number: <input type="number" name="group_number" required></th>
+</tr>
+<tr>
+<td colspan="2">Group Members: <input type="text" name="group_members" required></td>
+<td colspan="2">Project Title: <input type="text" name="project_title" required></td>
+</tr>
+</table>
+
+<form action="submit_score.php" method="POST">
+<table>
+<tr class="header-row">
+<th>Criteria</th>
+<th>Developing (0-10)</th>
+<th>Accomplished (10-15)</th>
+</tr>
+
+<!-- Criteria Rows -->
+<tr>
+<td>Articulate requirements</td>
+<td><input type="number" name="crit1_dev" min="0" max="10" class="score-input dev"></td>
+<td><input type="number" name="crit1_acc" min="10" max="15" class="score-input acc"></td>
+</tr>
+<tr>
+<td>Choose appropriate tools and methods</td>
+<td><input type="number" name="crit2_dev" min="0" max="10" class="score-input dev"></td>
+<td><input type="number" name="crit2_acc" min="10" max="15" class="score-input acc"></td>
+</tr>
+<tr>
+<td>Clear oral presentation</td>
+<td><input type="number" name="crit3_dev" min="0" max="10" class="score-input dev"></td>
+<td><input type="number" name="crit3_acc" min="10" max="15" class="score-input acc"></td>
+</tr>
+<tr>
+<td>Functioned well as team</td>
+<td><input type="number" name="crit4_dev" min="0" max="10" class="score-input dev"></td>
+<td><input type="number" name="crit4_acc" min="10" max="15" class="score-input acc"></td>
+</tr>
+
+<tr>
+<td>Judge's Name: <input type="text" name="judge_name" required></td>
+<td colspan="2">Total: <span id="totalScore">0</span></td>
+</tr>
+</table>
+
+<div>
+Comments:<br>
+<textarea class="comments" name="comments"></textarea>
+</div>
+<button type="submit" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none;">Submit</button>
+</form>
+</div>
+
+<script>
+document.querySelectorAll('.score-input').forEach(input => {
+input.addEventListener('input', function() {
+const row = this.closest('tr');
+const devInput = row.querySelector('.dev');
+const accInput = row.querySelector('.acc');
+
+// Clear both if input is empty
+if(this.value === '') {
+devInput.disabled = false;
+accInput.disabled = false;
+devInput.classList.remove('disabled');
+accInput.classList.remove('disabled');
+} else {
+// Disable opposite field
+if(this.classList.contains('dev')) {
+accInput.disabled = true;
+accInput.value = '';
+accInput.classList.add('disabled');
+} else {
+devInput.disabled = true;
+devInput.value = '';
+devInput.classList.add('disabled');
+}
+}
+
+// Calculate total
+let total = 0;
+document.querySelectorAll('.score-input:not(:disabled)').forEach(field => {
+total += parseInt(field.value) || 0;
+});
+document.getElementById('totalScore').textContent = total;
+});
+});
+</script>
+</body>
+</html>
