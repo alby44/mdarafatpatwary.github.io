@@ -1,0 +1,27 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+web:
+build: .
+ports:
+- "8000:80"
+depends_on:
+- db
+environment:
+- DB_HOST=db
+- DB_NAME=project_eval
+- DB_USER=root
+- DB_PASSWORD=secret
+
+db:
+image: mysql:5.7
+environment:
+MYSQL_ROOT_PASSWORD: secret
+MYSQL_DATABASE: project_eval
+volumes:
+- db_data:/var/lib/mysql
+- ./create_database.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+db_data:
